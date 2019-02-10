@@ -1,0 +1,511 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TuntiKirjausModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Contractors">
+          <Key>
+            <PropertyRef Name="Id_Contractor" />
+          </Key>
+          <Property Name="Id_Contractor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="200" />
+          <Property Name="ContactPerson" Type="nvarchar" MaxLength="200" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="VatId" Type="nvarchar" MaxLength="50" />
+          <Property Name="HourlyRate" Type="float" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="LastModifiedAt" Type="datetime" />
+          <Property Name="DeletedAt" Type="datetime" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="Id_Customer" />
+          </Key>
+          <Property Name="Id_Customer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="200" />
+          <Property Name="ContactPerson" Type="nvarchar" MaxLength="200" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="LastModifiedAt" Type="datetime" />
+          <Property Name="DeletedAt" Type="datetime" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="Id_Employee" />
+          </Key>
+          <Property Name="Id_Employee" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Contractor" Type="int" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="EmployeeReferences" Type="nvarchar" MaxLength="2000" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="LastModifiedAt" Type="datetime" />
+          <Property Name="DeletedAt" Type="datetime" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="Timesheet">
+          <Key>
+            <PropertyRef Name="Id_Timesheet" />
+          </Key>
+          <Property Name="Id_Timesheet" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Customers" Type="int" />
+          <Property Name="Id_Contractor" Type="int" />
+          <Property Name="Id_Employee" Type="int" />
+          <Property Name="id_WorkAssignment" Type="int" />
+          <Property Name="StarTime" Type="datetime" />
+          <Property Name="StopTime" Type="datetime" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="2000" />
+          <Property Name="WotkCompleted" Type="bit" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="LastModifiedAt" Type="datetime" />
+          <Property Name="DeletedAt" Type="datetime" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="WorkAssignments">
+          <Key>
+            <PropertyRef Name="Id_WorkAssignment" />
+          </Key>
+          <Property Name="Id_WorkAssignment" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Customer" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Deadline" Type="int" />
+          <Property Name="InProgress" Type="bit" />
+          <Property Name="InProgressAt" Type="datetime" />
+          <Property Name="Completed" Type="bit" />
+          <Property Name="CompletedAt" Type="datetime" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="LastModifiedAt" Type="datetime" />
+          <Property Name="DeletedAt" Type="datetime" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <Association Name="FK_Employees_Contractors">
+          <End Role="Contractors" Type="Self.Contractors" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contractors">
+              <PropertyRef Name="Id_Contractor" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="Id_Contractor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timesheet_Contractors">
+          <End Role="Contractors" Type="Self.Contractors" Multiplicity="0..1" />
+          <End Role="Timesheet" Type="Self.Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contractors">
+              <PropertyRef Name="Id_Contractor" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="Id_Contractor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timesheet_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Timesheet" Type="Self.Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id_Customer" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="Id_Customers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timesheet_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="Timesheet" Type="Self.Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id_Employee" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="Id_Employee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timesheet_WorkAssignment">
+          <End Role="WorkAssignments" Type="Self.WorkAssignments" Multiplicity="0..1" />
+          <End Role="Timesheet" Type="Self.Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WorkAssignments">
+              <PropertyRef Name="Id_WorkAssignment" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="id_WorkAssignment" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WorkAssignments_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+          <End Role="WorkAssignments" Type="Self.WorkAssignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id_Customer" />
+            </Principal>
+            <Dependent Role="WorkAssignments">
+              <PropertyRef Name="Id_Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TuntiKirjausModelStoreContainer">
+          <EntitySet Name="Contractors" EntityType="Self.Contractors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Timesheet" EntityType="Self.Timesheet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WorkAssignments" EntityType="Self.WorkAssignments" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employees_Contractors" Association="Self.FK_Employees_Contractors">
+            <End Role="Contractors" EntitySet="Contractors" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timesheet_Contractors" Association="Self.FK_Timesheet_Contractors">
+            <End Role="Contractors" EntitySet="Contractors" />
+            <End Role="Timesheet" EntitySet="Timesheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timesheet_Customers" Association="Self.FK_Timesheet_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Timesheet" EntitySet="Timesheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timesheet_Employees" Association="Self.FK_Timesheet_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Timesheet" EntitySet="Timesheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timesheet_WorkAssignment" Association="Self.FK_Timesheet_WorkAssignment">
+            <End Role="WorkAssignments" EntitySet="WorkAssignments" />
+            <End Role="Timesheet" EntitySet="Timesheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WorkAssignments_Customers" Association="Self.FK_WorkAssignments_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="WorkAssignments" EntitySet="WorkAssignments" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TuntiKirjausModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Contractor">
+          <Key>
+            <PropertyRef Name="Id_Contractor" />
+          </Key>
+          <Property Name="Id_Contractor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPerson" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="VatId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HourlyRate" Type="Double" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
+          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_Contractors" FromRole="Contractors" ToRole="Employees" />
+          <NavigationProperty Name="Timesheets" Relationship="Self.FK_Timesheet_Contractors" FromRole="Contractors" ToRole="Timesheet" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id_Customer" />
+          </Key>
+          <Property Name="Id_Customer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPerson" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
+          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Timesheets" Relationship="Self.FK_Timesheet_Customers" FromRole="Customers" ToRole="Timesheet" />
+          <NavigationProperty Name="WorkAssignments" Relationship="Self.FK_WorkAssignments_Customers" FromRole="Customers" ToRole="WorkAssignments" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id_Employee" />
+          </Key>
+          <Property Name="Id_Employee" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Contractor" Type="Int32" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeReferences" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
+          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Contractor" Relationship="Self.FK_Employees_Contractors" FromRole="Employees" ToRole="Contractors" />
+          <NavigationProperty Name="Timesheets" Relationship="Self.FK_Timesheet_Employees" FromRole="Employees" ToRole="Timesheet" />
+        </EntityType>
+        <EntityType Name="Timesheet">
+          <Key>
+            <PropertyRef Name="Id_Timesheet" />
+          </Key>
+          <Property Name="Id_Timesheet" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Customers" Type="Int32" />
+          <Property Name="Id_Contractor" Type="Int32" />
+          <Property Name="Id_Employee" Type="Int32" />
+          <Property Name="id_WorkAssignment" Type="Int32" />
+          <Property Name="StarTime" Type="DateTime" Precision="3" />
+          <Property Name="StopTime" Type="DateTime" Precision="3" />
+          <Property Name="Comments" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="WotkCompleted" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
+          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Contractor" Relationship="Self.FK_Timesheet_Contractors" FromRole="Timesheet" ToRole="Contractors" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Timesheet_Customers" FromRole="Timesheet" ToRole="Customers" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Timesheet_Employees" FromRole="Timesheet" ToRole="Employees" />
+          <NavigationProperty Name="WorkAssignment" Relationship="Self.FK_Timesheet_WorkAssignment" FromRole="Timesheet" ToRole="WorkAssignments" />
+        </EntityType>
+        <EntityType Name="WorkAssignment">
+          <Key>
+            <PropertyRef Name="Id_WorkAssignment" />
+          </Key>
+          <Property Name="Id_WorkAssignment" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Customer" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Deadline" Type="Int32" />
+          <Property Name="InProgress" Type="Boolean" />
+          <Property Name="InProgressAt" Type="DateTime" Precision="3" />
+          <Property Name="Completed" Type="Boolean" />
+          <Property Name="CompletedAt" Type="DateTime" Precision="3" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
+          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_WorkAssignments_Customers" FromRole="WorkAssignments" ToRole="Customers" />
+          <NavigationProperty Name="Timesheets" Relationship="Self.FK_Timesheet_WorkAssignment" FromRole="WorkAssignments" ToRole="Timesheet" />
+        </EntityType>
+        <Association Name="FK_Employees_Contractors">
+          <End Role="Contractors" Type="Self.Contractor" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contractors">
+              <PropertyRef Name="Id_Contractor" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="Id_Contractor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timesheet_Contractors">
+          <End Role="Contractors" Type="Self.Contractor" Multiplicity="0..1" />
+          <End Role="Timesheet" Type="Self.Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contractors">
+              <PropertyRef Name="Id_Contractor" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="Id_Contractor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timesheet_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Timesheet" Type="Self.Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id_Customer" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="Id_Customers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WorkAssignments_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
+          <End Role="WorkAssignments" Type="Self.WorkAssignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id_Customer" />
+            </Principal>
+            <Dependent Role="WorkAssignments">
+              <PropertyRef Name="Id_Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timesheet_Employees">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Timesheet" Type="Self.Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="Id_Employee" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="Id_Employee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Timesheet_WorkAssignment">
+          <End Role="WorkAssignments" Type="Self.WorkAssignment" Multiplicity="0..1" />
+          <End Role="Timesheet" Type="Self.Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WorkAssignments">
+              <PropertyRef Name="Id_WorkAssignment" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="id_WorkAssignment" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TimesheetEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Contractors" EntityType="Self.Contractor" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="Timesheets" EntityType="Self.Timesheet" />
+          <EntitySet Name="WorkAssignments" EntityType="Self.WorkAssignment" />
+          <AssociationSet Name="FK_Employees_Contractors" Association="Self.FK_Employees_Contractors">
+            <End Role="Contractors" EntitySet="Contractors" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timesheet_Contractors" Association="Self.FK_Timesheet_Contractors">
+            <End Role="Contractors" EntitySet="Contractors" />
+            <End Role="Timesheet" EntitySet="Timesheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timesheet_Customers" Association="Self.FK_Timesheet_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Timesheet" EntitySet="Timesheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WorkAssignments_Customers" Association="Self.FK_WorkAssignments_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="WorkAssignments" EntitySet="WorkAssignments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timesheet_Employees" Association="Self.FK_Timesheet_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Timesheet" EntitySet="Timesheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Timesheet_WorkAssignment" Association="Self.FK_Timesheet_WorkAssignment">
+            <End Role="WorkAssignments" EntitySet="WorkAssignments" />
+            <End Role="Timesheet" EntitySet="Timesheets" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TuntiKirjausModelStoreContainer" CdmEntityContainer="TimesheetEntities">
+          <EntitySetMapping Name="Contractors">
+            <EntityTypeMapping TypeName="TuntiKirjausModel.Contractor">
+              <MappingFragment StoreEntitySet="Contractors">
+                <ScalarProperty Name="Id_Contractor" ColumnName="Id_Contractor" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="VatId" ColumnName="VatId" />
+                <ScalarProperty Name="HourlyRate" ColumnName="HourlyRate" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="LastModifiedAt" ColumnName="LastModifiedAt" />
+                <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="TuntiKirjausModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="Id_Customer" ColumnName="Id_Customer" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="LastModifiedAt" ColumnName="LastModifiedAt" />
+                <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="TuntiKirjausModel.Employee">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="Id_Employee" ColumnName="Id_Employee" />
+                <ScalarProperty Name="Id_Contractor" ColumnName="Id_Contractor" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="EmployeeReferences" ColumnName="EmployeeReferences" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="LastModifiedAt" ColumnName="LastModifiedAt" />
+                <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Timesheets">
+            <EntityTypeMapping TypeName="TuntiKirjausModel.Timesheet">
+              <MappingFragment StoreEntitySet="Timesheet">
+                <ScalarProperty Name="Id_Timesheet" ColumnName="Id_Timesheet" />
+                <ScalarProperty Name="Id_Customers" ColumnName="Id_Customers" />
+                <ScalarProperty Name="Id_Contractor" ColumnName="Id_Contractor" />
+                <ScalarProperty Name="Id_Employee" ColumnName="Id_Employee" />
+                <ScalarProperty Name="id_WorkAssignment" ColumnName="id_WorkAssignment" />
+                <ScalarProperty Name="StarTime" ColumnName="StarTime" />
+                <ScalarProperty Name="StopTime" ColumnName="StopTime" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="WotkCompleted" ColumnName="WotkCompleted" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="LastModifiedAt" ColumnName="LastModifiedAt" />
+                <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkAssignments">
+            <EntityTypeMapping TypeName="TuntiKirjausModel.WorkAssignment">
+              <MappingFragment StoreEntitySet="WorkAssignments">
+                <ScalarProperty Name="Id_WorkAssignment" ColumnName="Id_WorkAssignment" />
+                <ScalarProperty Name="Id_Customer" ColumnName="Id_Customer" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+                <ScalarProperty Name="InProgress" ColumnName="InProgress" />
+                <ScalarProperty Name="InProgressAt" ColumnName="InProgressAt" />
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
+                <ScalarProperty Name="CompletedAt" ColumnName="CompletedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="LastModifiedAt" ColumnName="LastModifiedAt" />
+                <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
