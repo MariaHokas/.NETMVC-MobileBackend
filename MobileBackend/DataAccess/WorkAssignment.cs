@@ -24,7 +24,7 @@ namespace MobileBackend.DataAccess
         public int Id_Customer { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public Nullable<int> Deadline { get; set; }
+        public Nullable<System.DateTime> Deadline { get; set; }
         public Nullable<bool> InProgress { get; set; }
         public Nullable<System.DateTime> InProgressAt { get; set; }
         public Nullable<bool> Completed { get; set; }

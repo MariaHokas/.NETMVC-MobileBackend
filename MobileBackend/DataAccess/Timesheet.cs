@@ -19,7 +19,7 @@ namespace MobileBackend.DataAccess
         public Nullable<int> Id_Contractor { get; set; }
         public Nullable<int> Id_Employee { get; set; }
         public Nullable<int> id_WorkAssignment { get; set; }
-        public Nullable<System.DateTime> StarTime { get; set; }
+        public Nullable<System.DateTime> StartTime { get; set; }
         public Nullable<System.DateTime> StopTime { get; set; }
         public string Comments { get; set; }
         public Nullable<bool> WotkCompleted { get; set; }
