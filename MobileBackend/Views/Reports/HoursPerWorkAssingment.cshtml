@@ -58,20 +58,31 @@
 
         }
 
-
-
-        //sivunalustus
-        $(function () {
-            alustaGraafi();
-            $.get("/reports/GetTimesheetCounts", function (data) {
+        function lataaDataPalvelimelta(url) {
+            $.get(url, function (data) {
                 //alert("Data haettu")
 
                 myChart.config.data.datasets[0].data = data.Counts;
                 myChart.config.data.labels = data.Labels;
                 myChart.update();
-
-                //myChart.Bar(data.Counts, chartOptions);
             });
+        }
+
+
+        //sivunalustus
+        $(function () {
+            alustaGraafi();
+            lataaDataPalvelimelta("/reports/GetTimesheetCounts");
+            
+            $("#showOnlyCompletedRecords").change(function () {
+                var selected = $("#showOnlyCompletedRecords").is(":checked");
+
+                var url = "/reports/GetTimesheetCounts";
+                if(selected) {
+                    url += "?onlyComplete=1"
+                }
+                lataaDataPalvelimelta(url);
+            })
         });
     </script>
 }
@@ -126,5 +137,5 @@
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-
+<input id="showOnlyCompletedRecords" type="checkbox" /> Show Only Completed Records
 <canvas id="myChart" width="400" height="200"></canvas>
