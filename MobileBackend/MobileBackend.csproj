@@ -139,9 +139,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\MobileFronend\MobileFronend\MobileFronend\Models\WorkAssigmentOperationModel.cs">
-      <Link>Models\WorkAssigmentOperationModel.cs</Link>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -183,8 +180,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\WorkAssigmentOperationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\HoursPerWorkAssingmentsModel.cs" />
+    <Compile Include="ViewModels\ReportChartDataViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />

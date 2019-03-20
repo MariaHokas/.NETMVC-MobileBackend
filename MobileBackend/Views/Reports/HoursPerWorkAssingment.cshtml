@@ -14,16 +14,26 @@
     <script src="~/Scripts/Chart.js"></script>
 
     <script>
-        //sivunalustus
-        $(function () {
+        var myChart = null;
+        var chartOptions = {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        };
+
+        function alustaGraafi() {
             var ctx = document.getElementById('myChart');
-            var myChart = new Chart(ctx, {
+            myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    labels: ["aa", "ss"],
                     datasets: [{
-                        label: '# of Votes',
-                        data: [12, 19, 3, 5, 2, 3],
+                        label: 'Lukumäärä',
+                        data: [],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -43,19 +53,26 @@
                         borderWidth: 1
                     }]
                 },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
-                }
+                options: chartOptions
             });
 
-        });
+        }
 
+
+
+        //sivunalustus
+        $(function () {
+            alustaGraafi();
+            $.get("/reports/GetTimesheetCounts", function (data) {
+                //alert("Data haettu")
+
+                myChart.config.data.datasets[0].data = data.Counts;
+                myChart.config.data.labels = data.Labels;
+                myChart.update();
+
+                //myChart.Bar(data.Counts, chartOptions);
+            });
+        });
     </script>
 }
 <h2>HoursPerWorkAssingment</h2>
