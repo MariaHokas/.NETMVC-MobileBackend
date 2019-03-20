@@ -50,6 +50,7 @@
           <Property Name="LastModifiedAt" Type="datetime" />
           <Property Name="DeletedAt" Type="datetime" />
           <Property Name="Active" Type="bit" />
+          <Property Name="EmployeePicture" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Timesheet">
           <Key>
@@ -63,7 +64,7 @@
           <Property Name="StartTime" Type="datetime" />
           <Property Name="StopTime" Type="datetime" />
           <Property Name="Comments" Type="nvarchar" MaxLength="2000" />
-          <Property Name="WotkCompleted" Type="bit" />
+          <Property Name="WorkCompleted" Type="bit" />
           <Property Name="CreatedAt" Type="datetime" />
           <Property Name="LastModifiedAt" Type="datetime" />
           <Property Name="DeletedAt" Type="datetime" />
@@ -197,13 +198,17 @@
         <EntityContainer Name="TimesheetEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Contractors" EntityType="TuntiKirjausModel.Contractor" />
           <EntitySet Name="Customers" EntityType="TuntiKirjausModel.Customer" />
-          <EntitySet Name="Employees" EntityType="TuntiKirjausModel.Employee" />
-          <EntitySet Name="Timesheets" EntityType="TuntiKirjausModel.Timesheet" />
           <EntitySet Name="WorkAssignments" EntityType="TuntiKirjausModel.WorkAssignment" />
+          <AssociationSet Name="FK_WorkAssignments_Customers" Association="TuntiKirjausModel.FK_WorkAssignments_Customers">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="WorkAssignment" EntitySet="WorkAssignments" />
+          </AssociationSet>
+          <EntitySet Name="Employees" EntityType="TuntiKirjausModel.Employee" />
           <AssociationSet Name="FK_Employees_Contractors" Association="TuntiKirjausModel.FK_Employees_Contractors">
             <End Role="Contractor" EntitySet="Contractors" />
             <End Role="Employee" EntitySet="Employees" />
           </AssociationSet>
+          <EntitySet Name="Timesheets" EntityType="TuntiKirjausModel.Timesheet" />
           <AssociationSet Name="FK_Timesheet_Contractors" Association="TuntiKirjausModel.FK_Timesheet_Contractors">
             <End Role="Contractor" EntitySet="Contractors" />
             <End Role="Timesheet" EntitySet="Timesheets" />
@@ -211,10 +216,6 @@
           <AssociationSet Name="FK_Timesheet_Customers" Association="TuntiKirjausModel.FK_Timesheet_Customers">
             <End Role="Customer" EntitySet="Customers" />
             <End Role="Timesheet" EntitySet="Timesheets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WorkAssignments_Customers" Association="TuntiKirjausModel.FK_WorkAssignments_Customers">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="WorkAssignment" EntitySet="WorkAssignments" />
           </AssociationSet>
           <AssociationSet Name="FK_Timesheet_Employees" Association="TuntiKirjausModel.FK_Timesheet_Employees">
             <End Role="Employee" EntitySet="Employees" />
@@ -256,48 +257,8 @@
           <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
           <Property Name="DeletedAt" Type="DateTime" Precision="3" />
           <Property Name="Active" Type="Boolean" />
-          <NavigationProperty Name="Timesheets" Relationship="TuntiKirjausModel.FK_Timesheet_Customers" FromRole="Customer" ToRole="Timesheet" />
           <NavigationProperty Name="WorkAssignments" Relationship="TuntiKirjausModel.FK_WorkAssignments_Customers" FromRole="Customer" ToRole="WorkAssignment" />
-        </EntityType>
-        <EntityType Name="Employee">
-          <Key>
-            <PropertyRef Name="Id_Employee" />
-          </Key>
-          <Property Name="Id_Employee" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Id_Contractor" Type="Int32" />
-          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeReferences" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
-          <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
-          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
-          <Property Name="Active" Type="Boolean" />
-          <NavigationProperty Name="Contractor" Relationship="TuntiKirjausModel.FK_Employees_Contractors" FromRole="Employee" ToRole="Contractor" />
-          <NavigationProperty Name="Timesheets" Relationship="TuntiKirjausModel.FK_Timesheet_Employees" FromRole="Employee" ToRole="Timesheet" />
-        </EntityType>
-        <EntityType Name="Timesheet">
-          <Key>
-            <PropertyRef Name="Id_Timesheet" />
-          </Key>
-          <Property Name="Id_Timesheet" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Id_Customers" Type="Int32" />
-          <Property Name="Id_Contractor" Type="Int32" />
-          <Property Name="Id_Employee" Type="Int32" />
-          <Property Name="id_WorkAssignment" Type="Int32" />
-          <Property Name="StartTime" Type="DateTime" Precision="3" />
-          <Property Name="StopTime" Type="DateTime" Precision="3" />
-          <Property Name="Comments" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="WotkCompleted" Type="Boolean" />
-          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
-          <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
-          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
-          <Property Name="Active" Type="Boolean" />
-          <NavigationProperty Name="Contractor" Relationship="TuntiKirjausModel.FK_Timesheet_Contractors" FromRole="Timesheet" ToRole="Contractor" />
-          <NavigationProperty Name="Customer" Relationship="TuntiKirjausModel.FK_Timesheet_Customers" FromRole="Timesheet" ToRole="Customer" />
-          <NavigationProperty Name="Employee" Relationship="TuntiKirjausModel.FK_Timesheet_Employees" FromRole="Timesheet" ToRole="Employee" />
-          <NavigationProperty Name="WorkAssignment" Relationship="TuntiKirjausModel.FK_Timesheet_WorkAssignment" FromRole="Timesheet" ToRole="WorkAssignment" />
+          <NavigationProperty Name="Timesheets" Relationship="TuntiKirjausModel.FK_Timesheet_Customers" FromRole="Customer" ToRole="Timesheet" />
         </EntityType>
         <EntityType Name="WorkAssignment">
           <Key>
@@ -319,6 +280,37 @@
           <NavigationProperty Name="Customer" Relationship="TuntiKirjausModel.FK_WorkAssignments_Customers" FromRole="WorkAssignment" ToRole="Customer" />
           <NavigationProperty Name="Timesheets" Relationship="TuntiKirjausModel.FK_Timesheet_WorkAssignment" FromRole="WorkAssignment" ToRole="Timesheet" />
         </EntityType>
+        <Association Name="FK_WorkAssignments_Customers">
+          <End Type="TuntiKirjausModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="TuntiKirjausModel.WorkAssignment" Role="WorkAssignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id_Customer" />
+            </Principal>
+            <Dependent Role="WorkAssignment">
+              <PropertyRef Name="Id_Customer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id_Employee" />
+          </Key>
+          <Property Name="Id_Employee" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Contractor" Type="Int32" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeReferences" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
+          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="EmployeePicture" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Contractor" Relationship="TuntiKirjausModel.FK_Employees_Contractors" FromRole="Employee" ToRole="Contractor" />
+          <NavigationProperty Name="Timesheets" Relationship="TuntiKirjausModel.FK_Timesheet_Employees" FromRole="Employee" ToRole="Timesheet" />
+        </EntityType>
         <Association Name="FK_Employees_Contractors">
           <End Type="TuntiKirjausModel.Contractor" Role="Contractor" Multiplicity="0..1" />
           <End Type="TuntiKirjausModel.Employee" Role="Employee" Multiplicity="*" />
@@ -331,6 +323,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Timesheet">
+          <Key>
+            <PropertyRef Name="Id_Timesheet" />
+          </Key>
+          <Property Name="Id_Timesheet" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Customers" Type="Int32" />
+          <Property Name="Id_Contractor" Type="Int32" />
+          <Property Name="Id_Employee" Type="Int32" />
+          <Property Name="id_WorkAssignment" Type="Int32" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="StopTime" Type="DateTime" Precision="3" />
+          <Property Name="Comments" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="WorkCompleted" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedAt" Type="DateTime" Precision="3" />
+          <Property Name="DeletedAt" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Contractor" Relationship="TuntiKirjausModel.FK_Timesheet_Contractors" FromRole="Timesheet" ToRole="Contractor" />
+          <NavigationProperty Name="Customer" Relationship="TuntiKirjausModel.FK_Timesheet_Customers" FromRole="Timesheet" ToRole="Customer" />
+          <NavigationProperty Name="Employee" Relationship="TuntiKirjausModel.FK_Timesheet_Employees" FromRole="Timesheet" ToRole="Employee" />
+          <NavigationProperty Name="WorkAssignment" Relationship="TuntiKirjausModel.FK_Timesheet_WorkAssignment" FromRole="Timesheet" ToRole="WorkAssignment" />
+        </EntityType>
         <Association Name="FK_Timesheet_Contractors">
           <End Type="TuntiKirjausModel.Contractor" Role="Contractor" Multiplicity="0..1" />
           <End Type="TuntiKirjausModel.Timesheet" Role="Timesheet" Multiplicity="*" />
@@ -352,18 +366,6 @@
             </Principal>
             <Dependent Role="Timesheet">
               <PropertyRef Name="Id_Customers" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_WorkAssignments_Customers">
-          <End Type="TuntiKirjausModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="TuntiKirjausModel.WorkAssignment" Role="WorkAssignment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="Id_Customer" />
-            </Principal>
-            <Dependent Role="WorkAssignment">
-              <PropertyRef Name="Id_Customer" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -429,9 +431,29 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="WorkAssignments">
+            <EntityTypeMapping TypeName="TuntiKirjausModel.WorkAssignment">
+              <MappingFragment StoreEntitySet="WorkAssignments">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
+                <ScalarProperty Name="LastModifiedAt" ColumnName="LastModifiedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="CompletedAt" ColumnName="CompletedAt" />
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
+                <ScalarProperty Name="InProgressAt" ColumnName="InProgressAt" />
+                <ScalarProperty Name="InProgress" ColumnName="InProgress" />
+                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id_Customer" ColumnName="Id_Customer" />
+                <ScalarProperty Name="Id_WorkAssignment" ColumnName="Id_WorkAssignment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="TuntiKirjausModel.Employee">
               <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="EmployeePicture" ColumnName="EmployeePicture" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
                 <ScalarProperty Name="LastModifiedAt" ColumnName="LastModifiedAt" />
@@ -453,7 +475,7 @@
                 <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
                 <ScalarProperty Name="LastModifiedAt" ColumnName="LastModifiedAt" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="WotkCompleted" ColumnName="WotkCompleted" />
+                <ScalarProperty Name="WorkCompleted" ColumnName="WorkCompleted" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="StopTime" ColumnName="StopTime" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
@@ -462,25 +484,6 @@
                 <ScalarProperty Name="Id_Contractor" ColumnName="Id_Contractor" />
                 <ScalarProperty Name="Id_Customers" ColumnName="Id_Customers" />
                 <ScalarProperty Name="Id_Timesheet" ColumnName="Id_Timesheet" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="WorkAssignments">
-            <EntityTypeMapping TypeName="TuntiKirjausModel.WorkAssignment">
-              <MappingFragment StoreEntitySet="WorkAssignments">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="DeletedAt" ColumnName="DeletedAt" />
-                <ScalarProperty Name="LastModifiedAt" ColumnName="LastModifiedAt" />
-                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
-                <ScalarProperty Name="CompletedAt" ColumnName="CompletedAt" />
-                <ScalarProperty Name="Completed" ColumnName="Completed" />
-                <ScalarProperty Name="InProgressAt" ColumnName="InProgressAt" />
-                <ScalarProperty Name="InProgress" ColumnName="InProgress" />
-                <ScalarProperty Name="Deadline" ColumnName="Deadline" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Id_Customer" ColumnName="Id_Customer" />
-                <ScalarProperty Name="Id_WorkAssignment" ColumnName="Id_WorkAssignment" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

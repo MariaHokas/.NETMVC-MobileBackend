@@ -17,8 +17,8 @@ namespace MobileBackend.DataAccess
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Customer()
         {
-            this.Timesheets = new HashSet<Timesheet>();
             this.WorkAssignments = new HashSet<WorkAssignment>();
+            this.Timesheets = new HashSet<Timesheet>();
         }
     
         public int Id_Customer { get; set; }
@@ -32,8 +32,8 @@ namespace MobileBackend.DataAccess
         public Nullable<bool> Active { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Timesheet> Timesheets { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WorkAssignment> WorkAssignments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Timesheet> Timesheets { get; set; }
     }
 }

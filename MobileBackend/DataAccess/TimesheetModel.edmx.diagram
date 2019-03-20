@@ -4,19 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="adb4375ffd6e40f290872e41092746de" Name="Diagram1" ZoomLevel="37">
+      <Diagram DiagramId="adb4375ffd6e40f290872e41092746de" Name="Diagram1" ZoomLevel="111">
         <EntityTypeShape EntityType="TuntiKirjausModel.Contractor" Width="1.5" PointX="0.75" PointY="1.375" />
         <EntityTypeShape EntityType="TuntiKirjausModel.Customer" Width="1.5" PointX="3" PointY="12.5" />
-        <EntityTypeShape EntityType="TuntiKirjausModel.Employee" Width="1.5" PointX="3" PointY="1.375" />
-        <EntityTypeShape EntityType="TuntiKirjausModel.Timesheet" Width="1.5" PointX="5.25" PointY="1" />
         <EntityTypeShape EntityType="TuntiKirjausModel.WorkAssignment" Width="1.5" PointX="3" PointY="7.875" />
+        <AssociationConnector Association="TuntiKirjausModel.FK_WorkAssignments_Customers" />
+        <EntityTypeShape EntityType="TuntiKirjausModel.Employee" Width="1.5" PointX="3" PointY="1.25" />
         <AssociationConnector Association="TuntiKirjausModel.FK_Employees_Contractors" />
+        <EntityTypeShape EntityType="TuntiKirjausModel.Timesheet" Width="1.5" PointX="5.25" PointY="6.25" />
         <AssociationConnector Association="TuntiKirjausModel.FK_Timesheet_Contractors" />
         <AssociationConnector Association="TuntiKirjausModel.FK_Timesheet_Customers" />
-        <AssociationConnector Association="TuntiKirjausModel.FK_WorkAssignments_Customers" />
         <AssociationConnector Association="TuntiKirjausModel.FK_Timesheet_Employees" />
         <AssociationConnector Association="TuntiKirjausModel.FK_Timesheet_WorkAssignment" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

@@ -27,8 +27,8 @@ namespace MobileBackend.DataAccess
     
         public virtual DbSet<Contractor> Contractors { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<WorkAssignment> WorkAssignments { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Timesheet> Timesheets { get; set; }
-        public virtual DbSet<WorkAssignment> WorkAssignments { get; set; }
     }
 }

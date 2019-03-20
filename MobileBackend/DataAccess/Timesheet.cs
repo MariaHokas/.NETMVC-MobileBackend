@@ -22,7 +22,7 @@ namespace MobileBackend.DataAccess
         public Nullable<System.DateTime> StartTime { get; set; }
         public Nullable<System.DateTime> StopTime { get; set; }
         public string Comments { get; set; }
-        public Nullable<bool> WotkCompleted { get; set; }
+        public Nullable<bool> WorkCompleted { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
         public Nullable<System.DateTime> LastModifiedAt { get; set; }
         public Nullable<System.DateTime> DeletedAt { get; set; }

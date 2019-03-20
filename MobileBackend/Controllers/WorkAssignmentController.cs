@@ -57,7 +57,7 @@ namespace MobileBackend.Controllers
                     {
                         id_WorkAssignment = assignmentid,
                         StartTime = DateTime.Now,
-                        WotkCompleted = false,
+                        WorkCompleted = false,
                         Active = true,
                         CreatedAt = DateTime.Now
 
@@ -71,13 +71,14 @@ namespace MobileBackend.Controllers
                     int assignmentid = assingnment.Id_WorkAssignment;
                     Timesheet existing = (from ts in entities.Timesheets
                                             where (ts.id_WorkAssignment == assignmentid) &&
-                                            (ts.Active == true)
+                                            (ts.Active == true) && (ts.WorkCompleted == false)
+                                            orderby ts.StartTime descending
                                             select ts).FirstOrDefault();
 
                     if (existing != null)
                     {
                         existing.StopTime = DateTime.Now;
-                        existing.WotkCompleted = true;
+                        existing.WorkCompleted = true;
                         existing.LastModifiedAt = DateTime.Now;
                     }
 
