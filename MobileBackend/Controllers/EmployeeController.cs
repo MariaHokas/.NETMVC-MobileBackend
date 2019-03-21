@@ -31,7 +31,7 @@ namespace MobileBackend.Controllers
             return employeeNames;
         }
 
-        public  byte[] GetEmployeeImage(string employeeName)
+        public byte[] GetEmployeeImage(string employeeName)
         {
             TimesheetEntities entities = new TimesheetEntities();
             try
@@ -46,7 +46,6 @@ namespace MobileBackend.Controllers
                                 select e.EmployeePicture).FirstOrDefault();
 
                 return bytes;
-            
             }
             finally
             {
@@ -63,20 +62,19 @@ namespace MobileBackend.Controllers
                 {
                     FirstName = "Heebo",
                     LastName = "X",
-                    EmployeePicture = File.ReadAllBytes(@"C:\Temp\Heebo.png")
+                    EmployeePicture = File.ReadAllBytes(@"C:\Users\maria\Koodit\Heebo.png")
                 };
                 entities.Employees.Add(newEmployee);
                 entities.SaveChanges();
 
                 return "OK!";
-
             }
             finally
             {
                 entities.Dispose();
             }
 
-                return "Error";
+            return "Error";
         }
     }
 }

@@ -13,7 +13,7 @@ namespace MobileBackend.Controllers
     public class ReportsController : Controller
     {
         // GET: Reports
-        public ActionResult HoursPerWorkAssingment()
+        public ActionResult HoursPerWorkAssignment()
 
 
         {
@@ -33,12 +33,12 @@ namespace MobileBackend.Controllers
 
                 // ryhmitellään kirjaukset tehtävittäin ja lasketaan kestot
 
-                List<HoursPerWorkAssingmentsModel> model = new List<HoursPerWorkAssingmentsModel>();
+                List<HoursPerWorkAssignmentsModel> model = new List<HoursPerWorkAssignmentsModel>();
 
                 foreach (Timesheet timesheet in allTimesheetsToday)
                 {
                     int assignmentId = timesheet.id_WorkAssignment.Value;
-                    HoursPerWorkAssingmentsModel existing = model.Where(
+                    HoursPerWorkAssignmentsModel existing = model.Where(
                         m => m.WorkAssignmentId == assignmentId).FirstOrDefault();
 
                     if (existing != null)
@@ -47,7 +47,7 @@ namespace MobileBackend.Controllers
                     }
                     else
                     {
-                        existing = new HoursPerWorkAssingmentsModel()
+                        existing = new HoursPerWorkAssignmentsModel()
                         {
                             WorkAssignmentId = assignmentId,
                             WorkAssigmentName = timesheet.WorkAssignment.Title,
@@ -68,7 +68,7 @@ namespace MobileBackend.Controllers
 
         }
 
-        public ActionResult HoursPerWorkAssingmentAsExcel()
+        public ActionResult HoursPerWorkAssignmentAsExcel()
         {
             // TODO: Hae tiedot tietokannasta!
             //StrinBuilder nopeuttaa pitkien merkkijonojen generoimiseen. Nopeuttaa toimintaa
@@ -86,7 +86,7 @@ namespace MobileBackend.Controllers
             return File(buffer, "Text/csv", "Työtunnit.csv");
 
         }
-        public ActionResult HoursPerWorkAssingmentAsExcel2()
+        public ActionResult HoursPerWorkAssignmentAsExcel2()
         { 
             StringBuilder csv = new StringBuilder();
 
@@ -105,7 +105,7 @@ namespace MobileBackend.Controllers
 
                 // ryhmitellään kirjaukset tehtävittäin ja lasketaan kestot
 
-                List<HoursPerWorkAssingmentsModel> model = new List<HoursPerWorkAssingmentsModel>();
+                List<HoursPerWorkAssignmentsModel> model = new List<HoursPerWorkAssignmentsModel>();
 
                 foreach (Timesheet timesheet in allTimesheetsToday)
                 {

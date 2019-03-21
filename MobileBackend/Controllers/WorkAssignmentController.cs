@@ -13,11 +13,13 @@ namespace MobileBackend.Controllers
     {
         public string[] GetAll()
         {
+
+
             string[] assingnmentNames = null;
             TimesheetEntities entities = new TimesheetEntities();
             try
             {
-                //Jos olisi lista List<string> alkuun ja ToArrayn tilaalle ToLista();
+                //Jos olisi lista List<string> alkuun ja ToArrayn tilaalle ToList();
                 assingnmentNames = (from wa in entities.WorkAssignments
                                     where (wa.Active == true)
                                     select wa.Title).ToArray();
