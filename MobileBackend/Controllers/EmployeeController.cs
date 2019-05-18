@@ -74,7 +74,6 @@ namespace MobileBackend.Controllers
                 entities.Dispose();
             }
 
-            return "Error";
         }
     }
 }

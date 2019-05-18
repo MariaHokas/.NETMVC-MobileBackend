@@ -40,7 +40,7 @@ namespace MobileBackend.Controllers
             try
             {
                 //Jos olisi lista List<string> alkuun ja ToArrayn tilaalle ToLista();
-                WorkAssignment assingnment = (from wa in entities.WorkAssignments
+                WorkAssignment assingnment = (from wa in entities.WorkAssignments 
                                     where (wa.Active == true) &&
                                     (wa.Title == input.AssignmentTitle)
                                     select wa).FirstOrDefault();

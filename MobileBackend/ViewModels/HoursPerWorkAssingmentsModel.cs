@@ -10,6 +10,7 @@ namespace MobileBackend.ViewModels
         public int WorkAssignmentId { get; set; }
         public string WorkAssigmentName { get; set; }
         public double TotalHours { get; set; }
+        public double AllTotalHours { get; set; }
 
     }
 }

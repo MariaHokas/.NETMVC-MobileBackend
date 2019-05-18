@@ -1,12 +1,19 @@
-﻿using MobileBackend.DataAccess;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using MobileBackend.DataAccess;
 using MobileBackend.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+
 
 namespace MobileBackend.Controllers
 {
@@ -27,7 +34,7 @@ namespace MobileBackend.Controllers
                 // haetaan kaikki kuluvan päivän tuntikirjaukset
                 List<Timesheet> allTimesheetsToday = (from sh in entities.Timesheets
                                                       where (sh.StartTime > today) &&
-                                                        (sh.StartTime < tomorrow) &&                       
+                                                        (sh.StartTime < tomorrow) &&
                                                         (sh.WorkCompleted == true)
                                                       select sh).ToList();
 
@@ -64,8 +71,6 @@ namespace MobileBackend.Controllers
             {
                 entities.Dispose();
             }
-
-
         }
 
         public ActionResult HoursPerWorkAssignmentAsExcel()
@@ -87,7 +92,7 @@ namespace MobileBackend.Controllers
 
         }
         public ActionResult HoursPerWorkAssignmentAsExcel2()
-        { 
+        {
             StringBuilder csv = new StringBuilder();
 
             TimesheetEntities entities = new TimesheetEntities();
@@ -112,7 +117,6 @@ namespace MobileBackend.Controllers
                     csv.AppendLine(timesheet.Id_Employee + "," +
                     timesheet.StartTime + "," + timesheet.StopTime + ",");
                 }
-
             }
 
             finally
@@ -122,8 +126,7 @@ namespace MobileBackend.Controllers
             //palautetaan CSV-tiedot selaimelle
             byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
             return File(buffer, "Text/csv", "Työtunnit.csv");
-
-            }
+        }
 
         public ActionResult GetTimesheetCounts(string onlyComplete)
         {
@@ -150,8 +153,6 @@ namespace MobileBackend.Controllers
                                     orderby ts.id_WorkAssignment
                                     group ts by ts.id_WorkAssignment into grp
                                     select grp.Count()).ToArray();
-
-
                 }
 
             }
@@ -164,6 +165,8 @@ namespace MobileBackend.Controllers
 
         }
 
+
     }
 }
+
     
